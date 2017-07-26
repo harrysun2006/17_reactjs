@@ -1,0 +1,113 @@
+<html>
+<body>
+Hello
+<script type="text/javascript">
+var adder = {
+  base: 1,
+    
+  add: function(a) {
+    var f = v => v + this.base;
+    return f(a);
+  },
+
+  addThruCall: function(a) {
+    var f = v => v + this.base;
+    var b = {
+      base: 2
+    };
+
+    return f.call(b, a);
+  }
+};
+
+console.log(adder.add(1));         // This would log to 2
+console.log(adder.addThruCall(1)); // This would log to 2 still
+
+var arguments = [6,8,9];
+var arr = () => arguments;
+
+console.log(arr()); // 6
+
+function foo() {
+  var f = (i) => arguments[0] + i; // foo's implicit arguments binding
+  return f(2);
+}
+
+console.log(foo(1)); // 3
+
+var obj = {
+  i: 10,
+  b: () => console.log(this.i, this),
+  c: function() {
+    console.log(this.i, this);
+  }
+}
+obj.b(); // prints undefined, Window {...} (or the global object)
+obj.c(); // prints 10, Object {...}
+
+var func1 = () => { foo: 1 };               
+// Calling func() returns undefined!
+
+// var func2 = () => { foo: function() {} };   
+// SyntaxError: function statement requires a name
+
+var func3 = () => ({foo: 1});
+console.log(func1());
+// console.log(func2());
+console.log(func3());
+
+// An empty arrow function returns undefined
+let empty = () => {};
+
+(() => 'foobar')(); 
+// Returns "foobar"
+// (this is an Immediately Invoked Function Expression 
+// see 'IIFE' in glossary)
+
+var simple = a => a > 15 ? 15 : a; 
+simple(16); // 15
+simple(10); // 10
+console.log(simple(16), simple(10));
+
+let max = (a, b) => a > b ? a : b;
+
+// Easy array filtering, mapping, ...
+
+var arr = [5, 6, 13, 0, 1, 18, 23];
+
+var sum = arr.reduce((a, b) => a + b);  
+// 66
+
+var even = arr.filter(v => v % 2 == 0); 
+// [6, 0, 18]
+
+var double = arr.map(v => v * 2);       
+// [10, 12, 26, 0, 2, 36, 46]
+
+console.log(sum, even, double);
+
+// Parameterless arrow functions that are visually easier to parse
+setTimeout( () => {
+  console.log('I happen sooner');
+  setTimeout( () => {
+    // deeper code
+    console.log('I happen later');
+  }, 1);
+}, 1);
+
+function* foo() {
+  var index = 0;
+  while (index <= 2)
+    yield index++;
+}
+
+var iterator = foo();
+console.log(iterator.next()); // { value: 0, done: false }
+console.log(iterator.next()); // { value: 1, done: false }
+console.log(iterator.next()); // { value: 2, done: false }
+console.log(iterator.next()); // { value: undefined, done: true }
+
+</script>
+</body>
+</html>
+
